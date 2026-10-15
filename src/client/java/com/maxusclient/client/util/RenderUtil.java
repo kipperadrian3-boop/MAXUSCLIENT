@@ -30,13 +30,62 @@ public class RenderUtil {
         graphics.fill(x + w - 1, y, x + w, y + h, color);
     }
 
-    public static void renderCheckbox(GuiGraphicsExtractor graphics, Font font, int x, int y, boolean checked) {
-        int bg = checked ? 0xFF6242EA : 0xFF101116;
-        int border = checked ? 0xFF8566FF : 0xFF35384B;
-        renderBox(graphics, x, y, 14, 14, bg, border);
-        if (checked) {
-            graphics.text(font, "X", x + 4, y + 3, 0xFFFFFFFF, false);
+    public static void renderStatusIcon(GuiGraphicsExtractor graphics, int x, int y, int size, boolean active) {
+        if (active) {
+            // Completely green square with white checkmark icon (No text!)
+            graphics.fill(x, y, x + size, y + size, 0xFF22C55E);
+            renderBorder(graphics, x, y, size, size, 0xFF16A34A);
+
+            // Draw clean white checkmark
+            int s = Math.max(8, size);
+            int startX = x + (int) (s * 0.2f);
+            int startY = y + (int) (s * 0.5f);
+            int midX = x + (int) (s * 0.42f);
+            int midY = y + (int) (s * 0.75f);
+            int endX = x + (int) (s * 0.8f);
+            int endY = y + (int) (s * 0.28f);
+
+            // Short leg
+            for (int i = 0; i <= (midX - startX); i++) {
+                graphics.fill(startX + i, startY + i, startX + i + 1, startY + i + 1, 0xFFFFFFFF);
+                graphics.fill(startX + i, startY + i + 1, startX + i + 1, startY + i + 2, 0xFFFFFFFF);
+            }
+            // Long leg
+            for (int i = 0; i <= (endX - midX); i++) {
+                int py = midY - (int) (i * ((float)(midY - endY) / (endX - midX)));
+                graphics.fill(midX + i, py, midX + i + 1, py + 1, 0xFFFFFFFF);
+                graphics.fill(midX + i, py + 1, midX + i + 1, py + 2, 0xFFFFFFFF);
+            }
+        } else {
+            // Completely red square with white cross icon (No text!)
+            graphics.fill(x, y, x + size, y + size, 0xFFEF4444);
+            renderBorder(graphics, x, y, size, size, 0xFFDC2626);
+
+            int inset = Math.max(2, (int) (size * 0.22f));
+            for (int i = inset; i < size - inset; i++) {
+                graphics.fill(x + i, y + i, x + i + 1, y + i + 1, 0xFFFFFFFF);
+                graphics.fill(x + i, y + i + 1, x + i + 1, y + i + 2, 0xFFFFFFFF);
+                graphics.fill(x + size - 1 - i, y + i, x + size - i, y + i + 1, 0xFFFFFFFF);
+                graphics.fill(x + size - 1 - i, y + i + 1, x + size - i, y + i + 2, 0xFFFFFFFF);
+            }
         }
+    }
+
+    public static void renderPlusIcon(GuiGraphicsExtractor graphics, int x, int y, int size) {
+        graphics.fill(x, y, x + size, y + size, 0xFF22C55E);
+        renderBorder(graphics, x, y, size, size, 0xFF16A34A);
+        int mid = size / 2;
+        int inset = Math.max(2, size / 5);
+        graphics.fill(x + inset, y + mid, x + size - inset, y + mid + 1, 0xFFFFFFFF);
+        graphics.fill(x + mid, y + inset, x + mid + 1, y + size - inset, 0xFFFFFFFF);
+    }
+
+    public static void renderMinusIcon(GuiGraphicsExtractor graphics, int x, int y, int size) {
+        graphics.fill(x, y, x + size, y + size, 0xFFEF4444);
+        renderBorder(graphics, x, y, size, size, 0xFFDC2626);
+        int mid = size / 2;
+        int inset = Math.max(2, size / 5);
+        graphics.fill(x + inset, y + mid, x + size - inset, y + mid + 1, 0xFFFFFFFF);
     }
 
     public static void renderSearchBox(GuiGraphicsExtractor graphics, Font font, int x, int y, int w, String text, boolean focused, String placeholder) {

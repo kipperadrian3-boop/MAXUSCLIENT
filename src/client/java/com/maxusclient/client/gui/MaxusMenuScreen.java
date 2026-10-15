@@ -41,36 +41,36 @@ public class MaxusMenuScreen extends Screen {
 
         Category[] categories = Category.values();
         int catCount = categories.length;
-        int colW = Math.min(88, Math.max(68, (this.width - 24) / catCount));
-        int spacing = 4;
+        // 25% smaller: width 66px per category column
+        int colW = Math.min(66, Math.max(52, (this.width - 20) / catCount));
+        int spacing = 3;
         int totalW = catCount * colW + (catCount - 1) * spacing;
-        int startX = Math.max(6, (this.width - totalW) / 2);
-        int startY = 12;
+        int startX = Math.max(4, (this.width - totalW) / 2);
+        int startY = 10;
 
         int curX = startX;
         for (Category cat : categories) {
             boolean isCollapsed = categoryCollapsed.getOrDefault(cat, false);
             List<Module> modules = ModuleManager.getModulesByCategory(cat);
 
-            int headerH = 16;
-            int itemH = 16;
+            int headerH = 12; // 25% smaller
+            int itemH = 12;   // 25% smaller
             int bodyH = (isCollapsed || modules.isEmpty()) ? 0 : (modules.size() * itemH);
             int totalH = headerH + bodyH;
 
             // Header background & border
             RenderUtil.renderBox(graphics, curX, startY, colW, headerH, 0xFF9333EA, 0xFFA855F7);
 
-            // Header title (plainSubstrByWidth so it never overflows)
-            String title = this.font.plainSubstrByWidth(cat.getDisplayName(), colW - 14);
-            graphics.text(this.font, title, curX + 4, startY + 4, 0xFFFFFFFF, true);
+            // Header title
+            String title = this.font.plainSubstrByWidth(cat.getDisplayName(), colW - 10);
+            graphics.text(this.font, title, curX + 2, startY + 2, 0xFFFFFFFF, true);
 
             // Collapse arrow
             String arrow = isCollapsed ? "+" : "-";
-            graphics.text(this.font, arrow, curX + colW - 9, startY + 4, 0xFFFFFFFF, false);
+            graphics.text(this.font, arrow, curX + colW - 7, startY + 2, 0xFFFFFFFF, false);
 
             // Modules listed vertically directly underneath ("untereinander")
             if (!isCollapsed && !modules.isEmpty()) {
-                // Background behind module list
                 RenderUtil.renderBox(graphics, curX, startY + headerH, colW, bodyH, 0xFF14151F, 0xFF242636);
 
                 int itemY = startY + headerH;
@@ -89,8 +89,14 @@ public class MaxusMenuScreen extends Screen {
                     }
 
                     graphics.fill(curX + 1, itemY, curX + colW - 1, itemY + itemH, modBg);
-                    String modName = this.font.plainSubstrByWidth(mod.getName(), colW - 8);
-                    graphics.text(this.font, modName, curX + 4, itemY + 4, modText, enabled);
+                    String modName = this.font.plainSubstrByWidth(mod.getName(), colW - 15);
+                    graphics.text(this.font, modName, curX + 3, itemY + 2, modText, enabled);
+
+                    // Mini status icon (green check when enabled, red cross when disabled)
+                    int iconSize = 8;
+                    int iconX = curX + colW - iconSize - 2;
+                    int iconY = itemY + 2;
+                    RenderUtil.renderStatusIcon(graphics, iconX, iconY, iconSize, enabled);
 
                     itemY += itemH;
                 }
@@ -100,7 +106,7 @@ public class MaxusMenuScreen extends Screen {
         }
 
         // Helper text at the bottom-left corner
-        graphics.text(this.font, "Left click: Toggle | Right click: Settings", 6, this.height - 12, 0xFF888B9E, false);
+        graphics.text(this.font, "Left click: Toggle | Right click: Settings", 4, this.height - 10, 0xFF888B9E, false);
     }
 
     @Override
@@ -111,16 +117,16 @@ public class MaxusMenuScreen extends Screen {
 
         Category[] categories = Category.values();
         int catCount = categories.length;
-        int colW = Math.min(88, Math.max(68, (this.width - 24) / catCount));
-        int spacing = 4;
+        int colW = Math.min(66, Math.max(52, (this.width - 20) / catCount));
+        int spacing = 3;
         int totalW = catCount * colW + (catCount - 1) * spacing;
-        int startX = Math.max(6, (this.width - totalW) / 2);
-        int startY = 12;
+        int startX = Math.max(4, (this.width - totalW) / 2);
+        int startY = 10;
 
         int curX = startX;
         for (Category cat : categories) {
             boolean isCollapsed = categoryCollapsed.getOrDefault(cat, false);
-            int headerH = 16;
+            int headerH = 12;
 
             // Click on Header (toggle collapse)
             if (mouseX >= curX && mouseX <= curX + colW && mouseY >= startY && mouseY <= startY + headerH) {
@@ -131,18 +137,18 @@ public class MaxusMenuScreen extends Screen {
             // Click on items underneath
             if (!isCollapsed) {
                 List<Module> modules = ModuleManager.getModulesByCategory(cat);
-                int itemH = 16;
+                int itemH = 12;
                 int itemY = startY + headerH;
 
                 for (Module mod : modules) {
                     if (mouseX >= curX && mouseX <= curX + colW && mouseY >= itemY && mouseY <= itemY + itemH) {
                         if (button == 0) {
-                            // Left click: toggle module
+                            // Left-click: toggle module on/off
                             mod.toggle();
                             ConfigService.save();
                             return true;
                         } else if (button == 1) {
-                            // Right click: close this menu and open dedicated centered settings window!
+                            // Right-click: close this menu and open dedicated centered settings window!
                             if (mod instanceof BlockEsp) {
                                 Minecraft.getInstance().setScreenAndShow(new BlockEspSettingsScreen(this));
                                 return true;
