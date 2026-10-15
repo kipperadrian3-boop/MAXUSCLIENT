@@ -4,7 +4,6 @@ import com.maxusclient.client.controller.InputController;
 import com.maxusclient.client.controller.ModuleController;
 import com.maxusclient.client.module.ModuleManager;
 import com.maxusclient.client.render.WorldRenderer;
-import com.maxusclient.client.service.BlockRegistryService;
 import com.maxusclient.client.service.ConfigService;
 import net.fabricmc.api.ClientModInitializer;
 
@@ -18,10 +17,7 @@ public class MaxusClientMod implements ClientModInitializer {
         // 2. Load configurations for modules and settings
         ConfigService.init();
 
-        // 3. Cache block registry entries
-        BlockRegistryService.ensureCache();
-
-        // 4. Register world rendering dispatcher
+        // 3. Register world rendering dispatcher
         WorldRenderer.register();
 
         // 5. Register module ticker & chunk scanner

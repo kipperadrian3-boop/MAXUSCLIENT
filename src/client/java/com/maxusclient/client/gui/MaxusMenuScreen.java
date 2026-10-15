@@ -201,8 +201,8 @@ public class MaxusMenuScreen extends Screen {
                 }
 
                 // Block Icon
-                if (!info.stack.isEmpty()) {
-                    graphics.fakeItem(info.stack, leftX + 3, curY + 3);
+                if (!info.getStack().isEmpty()) {
+                    graphics.fakeItem(info.getStack(), leftX + 3, curY + 3);
                 } else {
                     graphics.fill(leftX + 4, curY + 4, leftX + 18, curY + 18, 0xFF353748);
                 }
@@ -249,8 +249,8 @@ public class MaxusMenuScreen extends Screen {
                 }
 
                 // Block Icon
-                if (info != null && !info.stack.isEmpty()) {
-                    graphics.fakeItem(info.stack, rightX + 3, rCurY + 3);
+                if (info != null && !info.getStack().isEmpty()) {
+                    graphics.fakeItem(info.getStack(), rightX + 3, rCurY + 3);
                 } else {
                     graphics.fill(rightX + 4, rCurY + 4, rightX + 18, rCurY + 18, 0xFF353748);
                 }
@@ -317,8 +317,8 @@ public class MaxusMenuScreen extends Screen {
                     graphics.fill(lX + 1, curY, lX + lW - 1, curY + itemH, 0xFF1B1D28);
                 }
 
-                if (info != null && !info.stack.isEmpty()) {
-                    graphics.fakeItem(info.stack, lX + 4, curY + 4);
+                if (info != null && !info.getStack().isEmpty()) {
+                    graphics.fakeItem(info.getStack(), lX + 4, curY + 4);
                 } else {
                     graphics.fill(lX + 4, curY + 4, lX + 20, curY + 20, 0xFF353748);
                 }
