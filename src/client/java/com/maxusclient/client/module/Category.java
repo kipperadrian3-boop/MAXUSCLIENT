@@ -1,11 +1,10 @@
 package com.maxusclient.client.module;
 public enum Category {
-    COMBAT("Combat"),
-    PLAYER("Player"),
-    MOVEMENT("Movement"),
     ESP("ESP"),
-    WORLD("World"),
-    MISC("Misc");
+    PLACEHOLDER1("PlaceHolder1"),
+    PLACEHOLDER2("Placeholder2"),
+    PLACEHOLDER3("Placeholder3"),
+    PLACEHOLDER4("Placeholder4");
 
     private final String displayName;
 
